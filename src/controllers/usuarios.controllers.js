@@ -1,5 +1,5 @@
 import url from 'url';
-import {getUsuarios, doLoginPrueba, doLogin} from '../services/usuarios.services.js';
+import {doLogin, getUsuarios, createUsuario, updateUsuario, doLoginPrueba} from '../services/usuarios.services.js';
 
 
 
@@ -67,6 +67,55 @@ export const getUsuariosControlador = async function (req, res) {
     }
     else{
         return res.status(200).json(usuarios);
+    }  
+}
+
+// controlador de createUsuario
+export const createUsuarioControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    //obtener parametros
+    var nombre = queryObject.nombre;
+    var apellidoPaterno = queryObject.apellidoPaterno;
+    var apellidoMaterno = queryObject.apellidoMaterno; 
+    var email = queryObject.email;
+    var password = queryObject.password;
+
+    console.log(nombre, apellidoPaterno, apellidoMaterno,email, password);
+
+    let result = await createUsuario(nombre, apellidoPaterno, apellidoMaterno, email, password);
+    console.log("data " +result);
+    let usuario = result; 
+    console.log("usuario: " + usuario);
+
+    if (usuario.length === 0) {
+        return res.status(401).json({message: 'No hay usuarios'});
+    }
+    else{
+        return res.status(200).json(usuario);
+    }  
+}
+
+// controlador de update contraseña del usuario
+export const updateUsuarioControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    //obtener parametros
+    var email = queryObject.email;
+    var password = queryObject.password;
+
+    console.log(email, password);
+
+    let result = await updateUsuario(email, password);
+    console.log("data " +result);
+    let usuario = result; 
+    console.log("usuario: " + usuario);
+
+    if (usuario.length === 0) {
+        return res.status(401).json({message: 'No hay usuarios'});
+    }
+    else{
+        return res.status(200).json(usuario);
     }  
 }
 

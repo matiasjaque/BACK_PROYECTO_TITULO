@@ -21,6 +21,31 @@ export const getUsuarios = async() =>{
 
 }
 
+export const createUsuario = async(nombre, apellidoPaterno, apellidoMaterno, email, password) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, email, password) values (?,?,?,?,?)", 
+    [nombre, apellidoPaterno, apellidoMaterno, email, password]);
+    console.log("services " + rows);
+    //res.json(rows);
+    return rows;
+    //res.send("hola");
+
+}
+
+export const updateUsuario = async(email, password) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("UPDATE usuario SET password = ? WHERE email = ?", 
+    [password, email]);
+    console.log("services " + rows);
+    //res.json(rows);
+    return rows;
+    //res.send("hola");
+
+}
+
+
+
+
 export const prueba = async(req, res) => {
     const connecction = await conexion();
     const [rows] = await connecction.execute('SELECT * FROM usuario');
