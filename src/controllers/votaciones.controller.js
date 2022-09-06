@@ -62,7 +62,8 @@ export const updateVotacionControlador = async function (req, res) {
     let result = await updateVotacion(idUsuario, titulo, idVotacion);
     console.log("data " +result);
     let votacion = result; 
-    console.log("votacion: " + votacion);
+    console.log("votacion: ");
+    console.log(votacion);
 
     if (votacion.length === 0) {
         return res.status(401).json({message: 'No hay votacion'});
