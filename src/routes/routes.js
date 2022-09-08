@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {getUsuariosControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
 import {getVotacionesByIdControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
 import {getPreguntasControlador, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
-import {getRespuestasControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador} from '../controllers/respuestas.controller.js';
+import {getRespuestasControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
 import {prueba, pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
 
 const router = Router();
@@ -62,11 +62,17 @@ router.delete('/preguntaDelete', deletePreguntaControlador);
 // obtener todas las respuestas de una pregunta de una votacion de un usuario
 router.get('/respuestasGet', getRespuestasControlador);
 
+// obtener la cantidad de votos
+router.get('/votosGet', getVotosControlador);
+
 // crear una nueva respuesta a una pregunta de una votacion
 router.post('/respuestaCreate', createRespuestaControlador);
 
 //actualizar una respuesta de una votacion
 router.put('/respuestaUpdate', updateRespuestaControlador); 
+
+//permitir un voto a una respuesta
+router.put('/votoUpdate', updateVotoControlador); 
 
 //delete respuesta de una votacion
 router.delete('/respuestaDelete', deleteRespuestaControlador); 

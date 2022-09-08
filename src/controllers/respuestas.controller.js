@@ -1,5 +1,5 @@
 import url from 'url';
-import {getRespuestas, createRespuesta, updateRespuesta, deleteRespuesta} from '../services/respuestas.services.js';
+import {getRespuestas, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos} from '../services/respuestas.services.js';
 
 
 
@@ -99,5 +99,54 @@ export const deleteRespuestaControlador = async function (req, res) {
     }
     else{
         return res.status(200).json(respuesta);
+    }  
+}
+
+
+// controlador de update respuesta by id
+export const updateVotoControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    //obtener parametros
+    var idPregunta = queryObject.idPregunta;
+    var idRespuesta = queryObject.idRespuesta;
+    var voto = queryObject.voto + 1;
+
+    console.log(idPregunta, idRespuesta, voto);
+
+    let result = await updateVoto(idPregunta, idRespuesta, voto);
+    console.log("data " +result);
+    let respuesta = result; 
+    console.log("respuesta: ");
+    console.log(respuesta);
+
+    if (respuesta.length === 0) {
+        return res.status(401).json({message: 'No hay respuesta'});
+    }
+    else{
+        return res.status(200).json(respuesta);
+    }  
+}
+
+// controlador de getVotos 
+
+export const getVotosControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    var idRespuesta = queryObject.idRespuesta;
+
+    console.log(idRespuesta);
+
+    let result = await getVotos(idRespuesta);
+    console.log("controlador " + result);
+    let voto = result; 
+    console.log("voto: ");
+    console.log(voto);
+
+    if (voto.length === 0) {
+        return res.status(401).json({message: '¡NO HAY VOTOS CREADAS AÚN!'});
+    }
+    else{
+        return res.status(200).json(voto);
     }  
 }
