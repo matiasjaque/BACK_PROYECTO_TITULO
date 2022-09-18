@@ -10,6 +10,16 @@ export const getPreguntas = async(idVotacion) =>{
     return rows;
 }
 
+export const getPreguntasGlobal = async() =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT * FROM pregunta ");
+    console.log("services ");
+    console.log(rows);
+    return rows;
+}
+
+
+
 
 export const createPregunta = async(idVotacion, titulo) =>{
     const connection = await conexion();

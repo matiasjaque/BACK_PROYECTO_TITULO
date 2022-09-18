@@ -38,7 +38,11 @@ export const createVotacionControlador = async function (req, res) {
     let result = await createVotacion(idUsuario, titulo );
     console.log("data " +result);
     let votacion = result; 
-    console.log("votacion: " + votacion);
+    console.log("votacion: ");
+    console.log(votacion);
+
+    console.log("votacion: insertId ");
+    console.log(votacion.insertId);
 
     if (votacion.length === 0) {
         return res.status(401).json({message: 'No se pudo crear la votacion'});

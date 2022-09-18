@@ -1,8 +1,8 @@
 import url from 'url';
-import {getPreguntas, createPregunta, updatePregunta, deletePregunta} from '../services/preguntas.services.js';
+import {getPreguntas, getPreguntasGlobal, createPregunta, updatePregunta, deletePregunta} from '../services/preguntas.services.js';
 
 
-// controlador de getVotaciones 
+// controlador de getPreguntas 
 
 export const getPreguntasControlador = async function (req, res) {
     const queryObject = url.parse(req.url, true).query;
@@ -23,6 +23,25 @@ export const getPreguntasControlador = async function (req, res) {
         return res.status(200).json(preguntas);
     }  
 }
+
+// controlador de gerPreguntasGlobal 
+
+export const getPreguntasGlobalControlador = async function (req, res) {
+
+    let result = await getPreguntasGlobal();
+    console.log("controlador " + result);
+    let preguntas = result; 
+    console.log("preguntas: " + preguntas);
+
+    if (preguntas.length === 0) {
+        return res.status(401).json({message: '¡NO HAY PREGUNTAS CREADAS AÚN!'});
+    }
+    else{
+        return res.status(200).json(preguntas);
+    }  
+}
+
+
 
 // controlador de createPreguntaControlador
 export const createPreguntaControlador = async function (req, res) {
