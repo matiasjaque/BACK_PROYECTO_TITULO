@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {getUsuariosControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
 import {getVotacionesByIdControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
 import {getPreguntasControlador, getPreguntasGlobalControlador, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
-import {getRespuestasControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
+import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
 import {prueba, pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
 
 const router = Router();
@@ -64,6 +64,9 @@ router.delete('/preguntaDelete', deletePreguntaControlador);
 
 // obtener todas las respuestas de una pregunta de una votacion de un usuario
 router.get('/respuestasGet', getRespuestasControlador);
+
+// obtener todas las respuestas 
+router.get('/respuestasGetGlobal', getRespuestasGlobalControlador);
 
 // obtener la cantidad de votos
 router.get('/votosGet', getVotosControlador);

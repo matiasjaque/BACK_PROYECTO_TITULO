@@ -3,7 +3,7 @@ import {conexion} from '../config.js';
 
 export const getPreguntas = async(idVotacion) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("SELECT titulo FROM pregunta WHERE id_votacion = ?",
+    const [rows] = await connection.execute("SELECT titulo, id_pregunta FROM pregunta WHERE id_votacion = ?",
         [idVotacion]);
     console.log("services ");
     console.log(rows);

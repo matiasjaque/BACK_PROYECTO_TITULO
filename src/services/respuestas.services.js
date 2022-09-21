@@ -11,6 +11,16 @@ export const getRespuestas = async(idPregunta) =>{
     return rows;
 }
 
+export const getRespuestasGlobal = async() =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT * FROM respuesta");
+    console.log("services ");
+    console.log(rows);
+    return rows;
+}
+
+
+
 export const createRespuesta = async(idPregunta, respuestas) =>{
     const connection = await conexion();
     const [rows] = await connection.execute("INSERT INTO respuesta (id_pregunta, respuesta, votos) values (?,?,?)", 

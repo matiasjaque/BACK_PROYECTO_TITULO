@@ -1,5 +1,5 @@
 import url from 'url';
-import {getRespuestas, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos} from '../services/respuestas.services.js';
+import {getRespuestas, getRespuestasGlobal, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos} from '../services/respuestas.services.js';
 
 
 
@@ -24,6 +24,25 @@ export const getRespuestasControlador = async function (req, res) {
         return res.status(200).json(respuestas);
     }  
 }
+
+// controlador de getRespuestasGlobal 
+
+export const getRespuestasGlobalControlador = async function (req, res) {
+
+    let result = await getRespuestasGlobal();
+    console.log("controlador " + result);
+    let respuestas = result; 
+    console.log("respuestas: " + respuestas);
+
+    if (respuestas.length === 0) {
+        return res.status(401).json({message: '¡NO HAY RESPUESTAS CREADAS AÚN!'});
+    }
+    else{
+        return res.status(200).json(respuestas);
+    }  
+}
+
+
 
 
 // controlador de createRespuesta
