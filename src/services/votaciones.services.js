@@ -13,6 +13,19 @@ export const getVotacionesById = async(idUsuario) =>{
 
 }
 
+export const getVotacionById = async(idVotacion) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT * FROM votacion WHERE id_votacion = ?",
+        [idVotacion]);
+    console.log("services ");
+    console.log(rows);
+    //res.json(rows);
+    return rows;
+    //res.send("hola");
+
+}
+
+
 export const createVotacion = async(idUsuario, titulo) =>{
     const connection = await conexion();
     const [rows] = await connection.execute("INSERT INTO votacion (titulo, id) values (?,?)", 

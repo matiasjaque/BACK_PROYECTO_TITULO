@@ -1,5 +1,5 @@
 import url from 'url';
-import {getVotacionesById, createVotacion, updateVotacion,deleteVotacion} from '../services/votaciones.services.js';
+import {getVotacionesById, getVotacionById, createVotacion, updateVotacion,deleteVotacion} from '../services/votaciones.services.js';
 
 
 
@@ -24,6 +24,29 @@ export const getVotacionesByIdControlador = async function (req, res) {
         return res.status(200).json(votaciones);
     }  
 }
+
+// controlador de getVotacion 
+
+export const getVotacionByIdControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    var idVotacion = queryObject.idVotacion;
+
+    console.log(idVotacion);
+
+    let result = await getVotacionById(idVotacion);
+    console.log("controlador " + result);
+    let votaciones = result; 
+    console.log("votaciones: " + votaciones);
+
+    if (votaciones.length === 0) {
+        return res.status(401).json({message: '¡NO HAY VOTACION CREADA AÚN!'});
+    }
+    else{
+        return res.status(200).json(votaciones);
+    }  
+}
+
 
 // controlador de createVotacionControlador
 export const createVotacionControlador = async function (req, res) {

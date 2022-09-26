@@ -18,6 +18,24 @@ export const getPreguntasGlobal = async() =>{
     return rows;
 }
 
+export const PreguntasConRespuestas = async(idVotacion) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute(
+        "SELECT p.ID_PREGUNTA, \
+                p.TITULO,\
+                r.ID_RESPUESTA, \
+                r.RESPUESTA, \
+                r.VOTOS \
+                FROM votacion v join pregunta p on v.ID_VOTACION = p.ID_VOTACION \
+                    join respuesta r on p.ID_PREGUNTA = r.ID_PREGUNTA\
+                where v.ID_VOTACION = ?", [idVotacion]);
+    console.log("services ");
+    console.log(rows);
+    return rows;
+}
+
+
+
 
 
 
