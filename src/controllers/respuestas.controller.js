@@ -129,7 +129,7 @@ export const updateVotoControlador = async function (req, res) {
     //obtener parametros
     var idPregunta = queryObject.idPregunta;
     var idRespuesta = queryObject.idRespuesta;
-    var voto = queryObject.voto + 1;
+    var voto = queryObject.voto;
 
     console.log(idPregunta, idRespuesta, voto);
 

@@ -8,7 +8,7 @@ import router from './routes/routes.js';
 const app = express();
 
 
-app.set('port', 3200);
+//app.set('port', 3200);
 app.use(morgan('dev'));
 
 app.use(express.json());
@@ -34,9 +34,11 @@ app.use(function (req, res, next) {
 });
  */
 
+const PORT = process.env.PORT || 3200;
+
 app.use(cors());
 app.use(router);
-app.listen(app.get('port'), ()=> {
+app.listen(PORT, ()=> {
     console.log('Servidor corriendo en puerto 3200');
 });
 
