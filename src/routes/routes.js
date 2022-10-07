@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {getUsuariosControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
-import {getVotacionesByIdControlador, getVotacionByIdControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
+import {getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
 import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
 import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
 import {prueba, pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
@@ -40,6 +40,9 @@ router.post('/votacionCreate', createVotacionControlador);
 
 //actualizar votacion
 router.put('/votacionUpdate', updateVotacionControlador); 
+
+//actualizar estado votacion
+router.put('/votacionEstadoUpdate', updateVotacionEstadoControlador); 
 
 //delete votacion
 router.delete('/votacionDelete', deleteVotacionControlador);

@@ -1,5 +1,5 @@
 import url from 'url';
-import {getVotacionesById, getVotacionById, createVotacion, updateVotacion,deleteVotacion} from '../services/votaciones.services.js';
+import {getVotacionesById, getVotacionById, createVotacion, updateVotacion, updateVotacionEstado, deleteVotacion} from '../services/votaciones.services.js';
 
 
 
@@ -55,10 +55,11 @@ export const createVotacionControlador = async function (req, res) {
     //obtener parametros
     var idUsuario = queryObject.idUsuario;
     var titulo = queryObject.titulo;
+    var idVotacion = queryObject.idVotacion;
 
-    console.log(idUsuario, titulo);
+    console.log(idUsuario, titulo, idVotacion);
 
-    let result = await createVotacion(idUsuario, titulo );
+    let result = await createVotacion(idUsuario, titulo, idVotacion );
     console.log("data " +result);
     let votacion = result; 
     console.log("votacion: ");
@@ -99,6 +100,33 @@ export const updateVotacionControlador = async function (req, res) {
         return res.status(200).json(votacion);
     }  
 }
+
+// controlador de update votacion estado by id
+export const updateVotacionEstadoControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    //obtener parametros
+    var idUsuario = queryObject.idUsuario;
+    var idVotacion = queryObject.idVotacion;
+    var estado = 0;
+
+    console.log(idUsuario, idVotacion, estado);
+
+    let result = await updateVotacionEstado(idUsuario, estado, idVotacion);
+    console.log("data " +result);
+    let votacion = result; 
+    console.log("votacion: ");
+    console.log(votacion);
+
+    if (votacion.length === 0) {
+        return res.status(401).json({message: 'No hay votacion'});
+    }
+    else{
+        return res.status(200).json(votacion);
+    }  
+}
+
+
 
 // controlador de delete votacion by id
 export const deleteVotacionControlador = async function (req, res) {

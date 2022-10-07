@@ -39,10 +39,10 @@ export const PreguntasConRespuestas = async(idVotacion) =>{
 
 
 
-export const createPregunta = async(idVotacion, titulo) =>{
+export const createPregunta = async(idVotacion, titulo, idPregunta) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("INSERT INTO pregunta (titulo, id_votacion) values (?,?)", 
-    [titulo, idVotacion]);
+    const [rows] = await connection.execute("INSERT INTO pregunta (id_pregunta, titulo, id_votacion) values (?,?,?)", 
+    [idPregunta, titulo, idVotacion]);
     console.log("services ");
     console.log(rows);
     return rows;

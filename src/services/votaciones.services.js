@@ -3,7 +3,7 @@ import {conexion} from '../config.js';
 
 export const getVotacionesById = async(idUsuario) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("SELECT titulo, fecha_modificacion, id_votacion FROM votacion WHERE id = ?",
+    const [rows] = await connection.execute("SELECT titulo, fecha_modificacion, id_votacion, estado FROM votacion WHERE id = ?",
         [idUsuario]);
     console.log("services ");
     console.log(rows);
@@ -26,10 +26,10 @@ export const getVotacionById = async(idVotacion) =>{
 }
 
 
-export const createVotacion = async(idUsuario, titulo) =>{
+export const    createVotacion = async(idUsuario, titulo, idVotacion) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("INSERT INTO votacion (titulo, id) values (?,?)", 
-    [titulo, idUsuario]);
+    const [rows] = await connection.execute("INSERT INTO votacion (id_votacion,titulo, id) values (?,?,?)", 
+    [idVotacion, titulo, idUsuario]);
     console.log("services ");
     console.log(rows);
     //res.json(rows);
@@ -49,6 +49,20 @@ export const updateVotacion = async(idUsuario, titulo, idVotacion) =>{
     //res.send("hola");
 
 }
+
+export const updateVotacionEstado = async(idUsuario, estado, idVotacion) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("UPDATE votacion set estado = ? WHERE id = ? AND id_votacion = ?", 
+    [estado, idUsuario, idVotacion]);
+    console.log("services ");
+    console.log(rows);
+    //res.json(rows);
+    return rows;
+    //res.send("hola");
+
+}
+
+
 
 export const deleteVotacion = async(idUsuario, idVotacion) =>{
     const connection = await conexion();

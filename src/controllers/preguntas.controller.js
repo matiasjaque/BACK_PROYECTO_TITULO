@@ -75,10 +75,11 @@ export const createPreguntaControlador = async function (req, res) {
     //obtener parametros
     var idVotacion = queryObject.idVotacion;
     var titulo = queryObject.titulo;
+    var idPregunta = queryObject.idPregunta;
 
     console.log(idVotacion, titulo);
 
-    let result = await createPregunta(idVotacion, titulo );
+    let result = await createPregunta(idVotacion, titulo, idPregunta);
     console.log("data " +result);
     let pregunta = result; 
     console.log("pregunta: ");
