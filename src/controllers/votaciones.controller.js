@@ -56,10 +56,11 @@ export const createVotacionControlador = async function (req, res) {
     var idUsuario = queryObject.idUsuario;
     var titulo = queryObject.titulo;
     var idVotacion = queryObject.idVotacion;
+    var estado = queryObject.estado;
 
-    console.log(idUsuario, titulo, idVotacion);
+    console.log(idUsuario, titulo, idVotacion, estado);
 
-    let result = await createVotacion(idUsuario, titulo, idVotacion );
+    let result = await createVotacion(idUsuario, titulo, idVotacion, estado );
     console.log("data " +result);
     let votacion = result; 
     console.log("votacion: ");
@@ -108,7 +109,7 @@ export const updateVotacionEstadoControlador = async function (req, res) {
     //obtener parametros
     var idUsuario = queryObject.idUsuario;
     var idVotacion = queryObject.idVotacion;
-    var estado = 0;
+    var estado = queryObject.estado;
 
     console.log(idUsuario, idVotacion, estado);
 
