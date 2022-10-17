@@ -57,8 +57,9 @@ export const createVotacionControlador = async function (req, res) {
     var titulo = queryObject.titulo;
     var idVotacion = queryObject.idVotacion;
     var estado = queryObject.estado;
+    var tipo = queryObject.tipo;
 
-    console.log(idUsuario, titulo, idVotacion, estado);
+    console.log(idUsuario, titulo, idVotacion, estado, tipo);
 
     let result = await createVotacion(idUsuario, titulo, idVotacion, estado );
     console.log("data " +result);

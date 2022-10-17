@@ -26,10 +26,11 @@ export const getVotacionById = async(idVotacion) =>{
 }
 
 
-export const createVotacion = async(idUsuario, titulo, idVotacion, estado) =>{
+
+export const createVotacion = async(idUsuario, titulo, idVotacion, estado, tipo) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("INSERT INTO votacion (id_votacion,titulo, id, estado) values (?,?,?, ?)", 
-    [idVotacion, titulo, idUsuario, estado]);
+    const [rows] = await connection.execute("INSERT INTO votacion (id_votacion,titulo, id, estado, tipo) values (?,?,?, ?, ?)", 
+    [idVotacion, titulo, idUsuario, estado, tipo]);
     console.log("services ");
     console.log(rows);
     //res.json(rows);

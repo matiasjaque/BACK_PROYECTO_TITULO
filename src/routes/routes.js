@@ -35,6 +35,7 @@ router.get('/votaciones', getVotacionesByIdControlador);
 // obtener la votacion by id
 router.get('/votacionById', getVotacionByIdControlador);
 
+
 // crear una nueva votacion
 router.post('/votacionCreate', createVotacionControlador);
 
