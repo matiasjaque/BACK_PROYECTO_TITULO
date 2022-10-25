@@ -3,6 +3,7 @@ import mysql from 'mysql2/promise';
 
 export const conexion = async() =>{
     return await mysql.createConnection({
+        /* host: 'localhost', */
         host: 'localhost',
         database: 'proyectoTitulo',
         user: 'root',
