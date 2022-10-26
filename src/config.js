@@ -2,12 +2,9 @@ import mysql from 'mysql2/promise';
 
 
 export const conexion = async() =>{
-<<<<<<< Updated upstream
-    return await mysql.createConnection({
-        /* host: 'localhost', */
-=======
+    
     /* return await mysql.createConnection({   
->>>>>>> Stashed changes
+
         host: 'localhost',
         database: 'proyectoTitulo',
         user: 'root',
