@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 });
  */
 
-const PORT = /* process.env.PORT || */ 3200;
+const PORT = process.env.PORT || 3200;
 
 app.use(cors());
 app.use(router);
