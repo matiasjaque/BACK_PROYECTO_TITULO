@@ -61,10 +61,10 @@ export const createVotacionControlador = async function (req, res) {
 
     console.log(idUsuario, titulo, idVotacion, estado, tipo);
 
-    let result = await createVotacion(idUsuario, titulo, idVotacion, estado );
+    let result = await createVotacion(idUsuario, titulo, idVotacion, estado, tipo );
     console.log("data " +result);
     let votacion = result; 
-    console.log("votacion: ");
+    console.log("votacion: ");  
     console.log(votacion);
 
     console.log("votacion: insertId ");

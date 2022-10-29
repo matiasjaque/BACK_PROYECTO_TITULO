@@ -29,7 +29,8 @@ export const getVotacionById = async(idVotacion) =>{
 
 export const createVotacion = async(idUsuario, titulo, idVotacion, estado, tipo) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("INSERT INTO votacion (id_votacion,titulo, id, estado, tipo) values (?,?,?, ?, ?)", 
+    console.log(idUsuario, titulo, idVotacion, estado, tipo);
+    const [rows] = await connection.execute("INSERT INTO votacion (ID_VOTACION, TITULO, ID, estado, tipo) values (?,?,?,?,?)", 
     [idVotacion, titulo, idUsuario, estado, tipo]);
     console.log("services ");
     console.log(rows);
