@@ -53,7 +53,7 @@ export const prueba = async(req, res) => {
 }
 
 export const pruebaHola = async(req, res) => {
-    res.send('hola mundo desde el servido online');
+    res.send('hola mundo desde el servido online original');
 }
 
 
