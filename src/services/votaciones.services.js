@@ -3,7 +3,7 @@ import {conexion} from '../config.js';
 
 export const getVotacionesById = async(idUsuario) =>{
     const connection = await conexion();
-    const [rows] = await connection.execute("SELECT titulo, fecha_modificacion, id_votacion, estado FROM votacion WHERE id = ?",
+    const [rows] = await connection.execute("SELECT titulo, fecha_modificacion, id_votacion, estado, porcentaje FROM votacion WHERE id = ?",
         [idUsuario]);
     console.log("services ");
     console.log(rows);
@@ -27,11 +27,11 @@ export const getVotacionById = async(idVotacion) =>{
 
 
 
-export const createVotacion = async(idUsuario, titulo, idVotacion, estado, tipo) =>{
+export const createVotacion = async(idUsuario, titulo, idVotacion, estado, tipo, porcentaje) =>{
     const connection = await conexion();
-    console.log(idUsuario, titulo, idVotacion, estado, tipo);
-    const [rows] = await connection.execute("INSERT INTO votacion (ID_VOTACION, TITULO, ID, estado, tipo) values (?,?,?,?,?)", 
-    [idVotacion, titulo, idUsuario, estado, tipo]);
+    console.log(idUsuario, titulo, idVotacion, estado, tipo, porcentaje);
+    const [rows] = await connection.execute("INSERT INTO votacion (ID_VOTACION, TITULO, ID, estado, tipo, porcentaje) values (?,?,?,?,?,?)", 
+    [idVotacion, titulo, idUsuario, estado, tipo, porcentaje]);
     console.log("services ");
     console.log(rows);
     //res.json(rows);
