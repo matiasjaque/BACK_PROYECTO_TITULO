@@ -97,8 +97,6 @@ router.delete('/respuestaDelete', deleteRespuestaControlador);
 // zona de pruebas
 router.get('/hola', pruebaHola);
 
-router.get('/prueba', prueba);
-
 router.get('/pruebaLogin', doLoginPrueba);
 
 export default router;
