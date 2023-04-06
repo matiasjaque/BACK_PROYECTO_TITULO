@@ -1,7 +1,26 @@
 import url from 'url';
-import {getVotacionesById, getVotacionById, createVotacion, updateVotacion, updateVotacionEstado, deleteVotacion} from '../services/votaciones.services.js';
+import {getVotacionesGlobal, getVotacionesById, getVotacionById, createVotacion, updateVotacion, updateVotacionEstado, deleteVotacion} from '../services/votaciones.services.js';
 
 
+
+
+// controlador de getVotaciones 
+
+export const getVotacionesControlador = async function (req, res) {
+    
+
+    let result = await getVotacionesGlobal();
+    console.log("controlador " + result);
+    let votaciones = result; 
+    console.log("votaciones: " + votaciones);
+
+    if (votaciones.length === 0) {
+        return res.status(401).json({message: '¡NO HAY VOTACIONES CREADAS AÚN!'});
+    }
+    else{
+        return res.status(200).json(votaciones);
+    }  
+}
 
 // controlador de getVotaciones 
 

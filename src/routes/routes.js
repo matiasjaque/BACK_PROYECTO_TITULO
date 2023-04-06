@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import {getUsuariosControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
-import {getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
+import {getVotacionesControlador, getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
 import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
 import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
-import {prueba, pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
+import { pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
 
 const router = Router();
 
@@ -28,6 +28,9 @@ router.put('/usuarioUpdate', updateUsuarioControlador);
 
 
 // votaciones
+
+// obtener todos los votaciones de la base de datos
+router.get('/votacionesGenerales', getVotacionesControlador);
 
 // obtener todos los votaciones de un usuario
 router.get('/votaciones', getVotacionesByIdControlador);

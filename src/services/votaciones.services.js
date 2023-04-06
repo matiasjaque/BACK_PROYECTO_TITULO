@@ -1,6 +1,15 @@
 import {conexion} from '../config.js';
 
 
+export const getVotacionesGlobal = async(idUsuario) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT * FROM votacion");
+    console.log("services ");
+    console.log(rows);
+    return rows;
+
+}
+
 export const getVotacionesById = async(idUsuario) =>{
     const connection = await conexion();
     const [rows] = await connection.execute("SELECT titulo, fecha_modificacion, id_votacion, estado, porcentaje FROM votacion WHERE id = ?",
