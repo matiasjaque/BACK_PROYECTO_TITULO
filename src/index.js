@@ -3,41 +3,36 @@ import morgan from 'morgan';
 import cors from 'cors';
 import './config.js';
 import router from './routes/routes.js';
+import xss from 'xss-clean';
+import rateLimit from 'express-rate-limit'
 
 
 const app = express();
+
+// utilizacion de rateLimit con el objetivo de evitar ataques de fuerza bruta.
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: 'Ha realizo el limite de peticiones en un tiempo de 1 hora.'
+})
 
 
 /* app.set('port', 3200); */
 app.use(morgan('dev'));
 
-app.use(express.json());
+// con el objetivo de evitar inserciones scripts/HTML en la entrada.
+app.use(xss())
 
-/* // Add headers before the routes are defined
-app.use(function (req, res, next) {
+// con el objetivo de evitar ataques DoS (denegacion de servicios)
+app.use(express.json({ limit: '20kb' }));
 
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
-});
- */
 
 const PORT = process.env.PORT || 3200;
 
 app.use(cors());
-app.use(router);
+app.use(router, limiter);
 app.listen(PORT, ()=> {
     console.log('Servidor corriendo en puerto 3200 ' + process.env.PORT + ' ' + PORT);
 });

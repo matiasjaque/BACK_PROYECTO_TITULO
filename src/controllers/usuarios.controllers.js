@@ -1,13 +1,7 @@
 import url from 'url';
 import {doLogin, getUsuarios, createUsuario, updateUsuario, doLoginPrueba} from '../services/usuarios.services.js';
 
-
-
-/* exports.home = async function (req, res) {
-    res.status(200).json({
-        message: "ruta status 200"
-    });
-}; */
+const onlyLettersPattern = /^[a-zA-Z0-9]+$/;
 
 // controller de getUsuarios
 //controla los errores y resultados
@@ -80,6 +74,12 @@ export const createUsuarioControlador = async function (req, res) {
     var apellidoMaterno = queryObject.apellidoMaterno; 
     var email = queryObject.email;
     var password = queryObject.password;
+
+    if( !nombre.match(onlyLettersPattern) ||
+        !apellidoPaterno.match(onlyLettersPattern) || 
+        !apellidoMaterno.match(onlyLettersPattern) ){
+        return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+    }
 
     console.log(nombre, apellidoPaterno, apellidoMaterno,email, password);
 
