@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {getUsuariosControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
+import {getUsuariosControlador, getUsuariosGmailControlador, updateContrasenaUsuarioControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
 import {getVotacionesControlador, getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
 import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
 import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
@@ -19,11 +19,17 @@ router.get('/login', login);
 // obtener todas las usuarios
 router.get('/usuarios', getUsuariosControlador);
 
+// obtener todas las usuarios
+router.get('/usuariosGmail', getUsuariosGmailControlador);
+
 // crear un nuevo usuario
 router.post('/usuarioCreate', createUsuarioControlador);
 
 //actualizar contraseña del usuario
 router.put('/usuarioUpdate', updateUsuarioControlador);
+
+//recuperar contraseña del usuario y enviar email
+router.put('/usuarioUpdateContrasena', updateContrasenaUsuarioControlador);
 
 
 

@@ -1,5 +1,5 @@
 import url from 'url';
-import {doLogin, getUsuarios, createUsuario, updateUsuario, doLoginPrueba} from '../services/usuarios.services.js';
+import {doLogin, getUsuarios, getUsuariosGmail, createUsuario, updateUsuario, updateUsuarioContrasena, doLoginPrueba} from '../services/usuarios.services.js';
 
 const onlyLettersPattern = /^[a-zA-Z0-9]+$/;
 
@@ -64,6 +64,24 @@ export const getUsuariosControlador = async function (req, res) {
     }  
 }
 
+// controlador de getUsuariosGmailControlador 
+
+export const getUsuariosGmailControlador = async function (req, res) {
+    let result = await getUsuariosGmail();
+    console.log("controlador " + result);
+    let usuarios = result; 
+    console.log("usuarios: " + usuarios);
+
+    if (usuarios.length === 0) {
+        return res.status(401).json({message: 'No hay usuarios'});
+    }
+    else{
+        return res.status(200).json(usuarios);
+    }  
+}
+
+
+
 // controlador de createUsuario
 export const createUsuarioControlador = async function (req, res) {
     const queryObject = url.parse(req.url, true).query;
@@ -118,6 +136,41 @@ export const updateUsuarioControlador = async function (req, res) {
         return res.status(200).json(usuario);
     }  
 }
+
+function generarContraseña(longitud) {
+    var caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var contraseña = "";
+    for (var i = 0; i < longitud; i++) {
+      contraseña += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    return contraseña;
+  }
+
+// controlador de update contraseña del usuario y enviar email
+export const updateContrasenaUsuarioControlador = async function (req, res) {
+    const queryObject = url.parse(req.url, true).query;
+
+    //obtener parametros
+    var email = queryObject.email;
+    var password = generarContraseña(8)
+    // crear la contraseña nueva dinamica
+
+    console.log(email, password);
+
+    let result = await updateUsuarioContrasena(email, password);
+    console.log("data " +result);
+    let usuario = result; 
+    console.log("usuario: " + usuario);
+
+    if (usuario.length === 0) {
+        return res.status(401).json({message: 'No hay usuarios'});
+    }
+    else{
+        return res.status(200).json(usuario);
+    }  
+}
+
+
 
 
 

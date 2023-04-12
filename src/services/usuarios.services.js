@@ -1,5 +1,6 @@
 import {conexion} from '../config.js';
 import url from 'url';
+import nodeMailer from 'nodemailer'
 
 
 export const doLogin = async (email, password) =>{
@@ -20,6 +21,18 @@ export const getUsuarios = async() =>{
     //res.send("hola");
 
 }
+
+export const getUsuariosGmail = async() =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT email FROM usuario", []);
+    console.log("services " + rows);
+    //res.json(rows);
+    return rows;
+    //res.send("hola");
+
+}
+
+
 
 export const createUsuario = async(nombre, apellidoPaterno, apellidoMaterno, email, password) =>{
     const connection = await conexion();
@@ -42,6 +55,61 @@ export const updateUsuario = async(email, password) =>{
     //res.send("hola");
 
 }
+
+export const updateUsuarioContrasena = async(email, password) =>{
+
+    nodeMailer.createTestAccount((err, account) =>{
+        const htmlEmail = `
+        <h3>Email enviado desde software de votación electronica</h3>
+        <ul>
+            <li>Email: ${email}</li>
+            <li>Asunto: "Recuperar contraseña"</li>
+        </ul>
+        <h3>Mensaje</h3>
+        <p>"Su nueva contraseña es: " + ${password}</p>
+        `;
+        let transporter = nodeMailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: "softwaredevotacion@gmail.com",
+                pass: "uttmfrtmnczhntno" 
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        })
+
+        let mailOptions = {
+            from: "softwaredevotacion@gmail.com",
+            to: email,
+            replyTo: "softwaredevotacion@gmail.com",
+            subject: "Softwaredevotacion",
+            text: "texto",
+            html: htmlEmail
+        };
+
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("Mensaje enviado: %s", info.mensaje);
+            console.log("Url del mensaje: %s",  nodeMailer.getTestMessageUrl(info)); 
+        })
+    })
+
+    const connection = await conexion();
+    const [rows] = await connection.execute("UPDATE usuario SET password = ? WHERE email = ?", 
+    [password, email]);
+    console.log("services " + rows);
+    //res.json(rows);
+    return rows;
+    //res.send("hola");
+
+}
+
+
 
 
 
