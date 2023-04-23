@@ -1,7 +1,7 @@
 import url from 'url';
 import {getRespuestas, getRespuestasGlobal, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos} from '../services/respuestas.services.js';
 
-const onlyLettersPattern = /^[a-zA-Z0-9]+$/;
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóú]+$/;
 
 // controlador de getRespuestas 
 
@@ -57,11 +57,15 @@ export const createRespuestaControlador = async function (req, res) {
     var idPregunta = queryObject.idPregunta;
     var respuestas = queryObject.respuestas;
 
+    
+
+    console.log(idPregunta, respuestas);
+
     if(isNaN(idPregunta) || !respuestas.match(onlyLettersPattern)){
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
     }
 
-    console.log(idPregunta, respuestas);
+    
 
     let result = await createRespuesta(idPregunta, respuestas );
     console.log("data " +result);

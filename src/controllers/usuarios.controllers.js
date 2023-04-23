@@ -1,7 +1,7 @@
 import url from 'url';
 import {doLogin, getUsuarios, getUsuariosGmail, createUsuario, updateUsuario, updateUsuarioContrasena, doLoginPrueba} from '../services/usuarios.services.js';
 
-const onlyLettersPattern = /^[a-zA-Z0-9]+$/;
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóú]+$/;
 
 // controller de getUsuarios
 //controla los errores y resultados

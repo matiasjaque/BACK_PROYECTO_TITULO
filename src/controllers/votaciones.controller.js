@@ -1,7 +1,7 @@
 import url from 'url';
 import {getVotacionesGlobal, getVotacionesById, getVotacionById, createVotacion, updateVotacion, updateVotacionEstado, deleteVotacion} from '../services/votaciones.services.js';
 
-const onlyLettersPattern = /^[a-zA-Z0-9]+$/;
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóú]+$/;
 
 
 // controlador de getVotaciones 
@@ -77,6 +77,7 @@ export const getVotacionByIdControlador = async function (req, res) {
 
 // controlador de createVotacionControlador
 export const createVotacionControlador = async function (req, res) {
+
     const queryObject = url.parse(req.url, true).query;
 
     //obtener parametros
@@ -87,6 +88,8 @@ export const createVotacionControlador = async function (req, res) {
     var tipo = queryObject.tipo;
     var porcentaje = queryObject.porcentaje;
 
+    console.log(idUsuario, titulo, idVotacion, estado, tipo, porcentaje);
+
     if( isNaN(idUsuario) ||
         !titulo.match(onlyLettersPattern) ||
         isNaN(idVotacion) || 
@@ -96,7 +99,7 @@ export const createVotacionControlador = async function (req, res) {
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
     }
 
-    console.log(idUsuario, titulo, idVotacion, estado, tipo, porcentaje);
+    
 
     let result = await createVotacion(idUsuario, titulo, idVotacion, estado, tipo, porcentaje);
     console.log("data " +result);

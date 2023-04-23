@@ -1,7 +1,7 @@
 import url from 'url';
 import {getPreguntas, getPreguntasGlobal, PreguntasConRespuestas, createPregunta, updatePregunta, deletePregunta} from '../services/preguntas.services.js';
 
-const onlyLettersPattern = /^[a-zA-Z0-9]+$/;
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóú]+$/;
 
 
 // controlador de getPreguntas 
@@ -98,7 +98,12 @@ export const createPreguntaControlador = async function (req, res) {
     var titulo = queryObject.titulo;
     var idPregunta = queryObject.idPregunta;
 
-    console.log(idVotacion, titulo);
+    console.log(req.url,true)
+    console.log((req.url,true).query)
+    console.log(url.parse(req.url, true).query)
+    
+
+    console.log(idVotacion, titulo, idPregunta);
 
     if(isNaN(idVotacion) || isNaN(idPregunta) || !titulo.match(onlyLettersPattern)){
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 

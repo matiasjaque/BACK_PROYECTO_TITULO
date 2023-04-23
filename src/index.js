@@ -5,9 +5,18 @@ import './config.js';
 import router from './routes/routes.js';
 import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit'
+import helmet from 'helmet';
+
+const corsOptions = {
+	origin: ['http://localhost:3000'],
+};
+
+
+
 
 
 const app = express();
+
 
 // utilizacion de rateLimit con el objetivo de evitar ataques de fuerza bruta.
 const limiter = rateLimit({
@@ -18,6 +27,24 @@ const limiter = rateLimit({
     message: 'Ha realizo el limite de peticiones en un tiempo de 1 hora.'
 })
 
+app.use((req, res, next) => {
+	res.setHeader('X-Content-Type-Options', 'nosniff');
+	next();
+  });
+  
+
+app.disable('x-powered-by');
+app.use(helmet.hidePoweredBy());
+
+// configuracion La función frameguard de helmet establece la cabecera X-Frame-Options en la respuesta HTTP para prevenir ataques de 'ClickJacking'. La directiva action establece el modo de protección y en este caso se está estableciendo en sameorigin.
+// La función contentSecurityPolicy establece la cabecera Content-Security-Policy en la respuesta HTTP para especificar las políticas de seguridad para recursos que se cargan en tu sitio web. La directiva defaultSrc especifica los orígenes permitidos para recursos predeterminados, como scripts, imágenes y estilos. La directiva frameAncestors especifica los orígenes permitidos para cargar el sitio web en un iframe. En este caso, se está configurando para permitir solo el mismo origen.
+app.use(helmet.frameguard({ action: 'sameorigin' }));
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    frameAncestors: ["'self'"]
+  }
+}));
 
 /* app.set('port', 3200); */
 app.use(morgan('dev'));
@@ -28,10 +55,13 @@ app.use(xss())
 // con el objetivo de evitar ataques DoS (denegacion de servicios)
 app.use(express.json({ limit: '20kb' }));
 
+//app.disable('x-powered-by');
+
+
 
 const PORT = process.env.PORT || 3200;
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(router, limiter);
 app.listen(PORT, ()=> {
     console.log('Servidor corriendo en puerto 3200 ' + process.env.PORT + ' ' + PORT);
