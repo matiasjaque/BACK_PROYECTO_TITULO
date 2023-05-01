@@ -1,7 +1,8 @@
 import url from 'url';
 import {getPreguntas, getPreguntasGlobal, PreguntasConRespuestas, createPregunta, updatePregunta, deletePregunta} from '../services/preguntas.services.js';
 
-const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóú]+$/;
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
+
 
 
 // controlador de getPreguntas 

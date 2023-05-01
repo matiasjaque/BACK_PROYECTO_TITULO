@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {getUsuariosControlador, getUsuariosGmailControlador, updateContrasenaUsuarioControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
+import {getUsuariosVotanteControlador, createUsuarioVotanteControlador, updateUsuarioVotanteControlador, deleteUsuarioVotanteControlador} from '../controllers/usuarioVotante.controlador.js';
 import {getVotacionesControlador, getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
 import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
 import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
@@ -31,7 +32,19 @@ router.put('/usuarioUpdate', updateUsuarioControlador);
 //recuperar contraseña del usuario y enviar email
 router.put('/usuarioUpdateContrasena', updateContrasenaUsuarioControlador);
 
+// usuario votante
 
+// obtener todas las usuarios
+router.get('/usuariosVotante', getUsuariosVotanteControlador);
+
+// crear un nuevo usuario
+router.post('/usuarioVotanteCreate', createUsuarioVotanteControlador);
+
+//actualizar estado voto del usuario votante
+router.put('/usuarioVotanteUpdate', updateUsuarioVotanteControlador);
+
+//delete usuario votante
+router.delete('/usuarioVotanteDelete', deleteUsuarioVotanteControlador);
 
 // votaciones
 
@@ -101,6 +114,9 @@ router.put('/votoUpdate', updateVotoControlador);
 
 //delete respuesta de una votacion
 router.delete('/respuestaDelete', deleteRespuestaControlador); 
+
+
+
 
 
 // zona de pruebas

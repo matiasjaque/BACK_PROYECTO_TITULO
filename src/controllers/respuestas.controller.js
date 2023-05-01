@@ -1,7 +1,8 @@
 import url from 'url';
 import {getRespuestas, getRespuestasGlobal, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos} from '../services/respuestas.services.js';
 
-const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóú]+$/;
+const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
+
 
 // controlador de getRespuestas 
 
