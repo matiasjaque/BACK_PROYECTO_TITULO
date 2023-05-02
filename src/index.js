@@ -43,14 +43,14 @@ app.use(helmet.frameguard({ action: 'sameorigin' }));
     frameAncestors: ["'self'"]
   }
 })); */
-app.use(
+/* app.use(
   helmet.contentSecurityPolicy({
       directives: {
           // otras directivas...
           connectSrc: ["'self'", 'https://servidormysqlvotar.herokuapp.com']
       }
   })
-);
+); */
 
 /* app.set('port', 3200); */
 app.use(morgan('dev'));
