@@ -7,15 +7,13 @@ import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet';
 
-const corsOptions = {
-	origin: ['http://localhost:3000'],
-};
-
-
-
 
 
 const app = express();
+
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://votaciononline.s3-website-us-east-1.amazonaws.com'],
+};
 
 
 // utilizacion de rateLimit con el objetivo de evitar ataques de fuerza bruta.
