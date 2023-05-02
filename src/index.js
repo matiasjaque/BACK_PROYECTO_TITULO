@@ -11,9 +11,9 @@ import helmet from 'helmet';
 
 const app = express();
 
-const corsOptions = {
+/* const corsOptions = {
   origin: ['http://localhost:3000', 'http://votaciononline.s3-website-us-east-1.amazonaws.com'],
-};
+}; */
 
 
 // utilizacion de rateLimit con el objetivo de evitar ataques de fuerza bruta.
@@ -59,7 +59,7 @@ app.use(express.json({ limit: '20kb' }));
 
 const PORT = process.env.PORT || 3200;
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(router, limiter);
 app.listen(PORT, ()=> {
     console.log('Servidor corriendo en puerto 3200 ' + process.env.PORT + ' ' + PORT);
