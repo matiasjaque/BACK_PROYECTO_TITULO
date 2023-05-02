@@ -37,12 +37,20 @@ app.use(helmet.hidePoweredBy());
 // configuracion La función frameguard de helmet establece la cabecera X-Frame-Options en la respuesta HTTP para prevenir ataques de 'ClickJacking'. La directiva action establece el modo de protección y en este caso se está estableciendo en sameorigin.
 // La función contentSecurityPolicy establece la cabecera Content-Security-Policy en la respuesta HTTP para especificar las políticas de seguridad para recursos que se cargan en tu sitio web. La directiva defaultSrc especifica los orígenes permitidos para recursos predeterminados, como scripts, imágenes y estilos. La directiva frameAncestors especifica los orígenes permitidos para cargar el sitio web en un iframe. En este caso, se está configurando para permitir solo el mismo origen.
 app.use(helmet.frameguard({ action: 'sameorigin' }));
-app.use(helmet.contentSecurityPolicy({
+/* app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
     frameAncestors: ["'self'"]
   }
-}));
+})); */
+app.use(
+  helmet.contentSecurityPolicy({
+      directives: {
+          // otras directivas...
+          connectSrc: ["'self'", 'https://servidormysqlvotar.herokuapp.com']
+      }
+  })
+);
 
 /* app.set('port', 3200); */
 app.use(morgan('dev'));
