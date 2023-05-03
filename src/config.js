@@ -12,12 +12,19 @@ export const conexion = async() =>{
     }) */
 
     return await mysql.createConnection({
+        host: 'bd-remota.mysql.database.azure.com',
+        database: 'bd-remota',
+        user: 'adminmysql',
+        password: 'matiasjaque2000*',
+    })  
+
+    /* return await mysql.createConnection({
         host: 'us-cdbr-east-06.cleardb.net',
         database: 'heroku_4ee8e3e776a72ff',
         user: 'b1caafadaac623',
         password: 'ce65f55c',
         migrate: 'safe',
-    })  
+    })   */
 }
 
 
