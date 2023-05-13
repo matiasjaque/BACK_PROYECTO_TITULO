@@ -19,6 +19,15 @@ export const getRespuestasGlobal = async() =>{
     return rows;
 }
 
+export const buscarRespuesta = async(respuestas, idPregunta) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT * FROM respuesta WHERE respuesta = ? AND id_pregunta = ?",
+    [respuestas, idPregunta]);
+    console.log("services ");
+    console.log(rows);
+    return rows.length > 0 ? rows[0] : null;
+}
+
 
 
 export const createRespuesta = async(idPregunta, respuestas) =>{
@@ -52,6 +61,7 @@ export const deleteRespuesta = async(idPregunta, idRespuesta) =>{
 
 
 export const updateVoto = async(idPregunta, idRespuesta, voto) =>{
+    console.log(voto, idPregunta, idRespuesta)
     const connection = await conexion();
     const [rows] = await connection.execute("UPDATE respuesta set votos = ? WHERE id_pregunta = ? AND id_respuesta = ?", 
     [voto, idPregunta, idRespuesta]);

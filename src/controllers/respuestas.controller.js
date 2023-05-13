@@ -1,5 +1,6 @@
 import url from 'url';
-import {getRespuestas, getRespuestasGlobal, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos} from '../services/respuestas.services.js';
+import bodyParser from 'body-parser';
+import {getRespuestas, getRespuestasGlobal, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos, buscarRespuesta} from '../services/respuestas.services.js';
 
 const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
 
@@ -66,6 +67,12 @@ export const createRespuestaControlador = async function (req, res) {
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
     }
 
+    // validar si la respuesta ya existe
+    const respuestaExistente = await buscarRespuesta(respuestas, idPregunta);
+
+    if(respuestaExistente){
+        return res.status(409).json({message: 'La respuesta ya existe'});
+    }
     
 
     let result = await createRespuesta(idPregunta, respuestas );
@@ -145,31 +152,26 @@ export const deleteRespuestaControlador = async function (req, res) {
 
 // controlador de update respuesta by id
 export const updateVotoControlador = async function (req, res) {
-    const queryObject = url.parse(req.url, true).query;
-
-    //obtener parametros
-    var idPregunta = queryObject.idPregunta;
-    var idRespuesta = queryObject.idRespuesta;
-    var voto = queryObject.voto;
-
-    if(isNaN(idPregunta) || isNaN(idRespuesta) || isNaN(voto)){
-        return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+    
+    const votos = req.body;
+    console.log(votos)
+    if (!Array.isArray(votos)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de votos' });
     }
 
-    console.log(idPregunta, idRespuesta, voto);
-
-    let result = await updateVoto(idPregunta, idRespuesta, voto);
-    console.log("data " +result);
-    let respuesta = result; 
-    console.log("respuesta: ");
-    console.log(respuesta);
-
-    if (respuesta.length === 0) {
-        return res.status(401).json({message: 'No hay respuesta'});
+    try {
+        for (const voto of votos) {
+          const idPregunta = voto.idPregunta;
+          const idRespuesta = voto.idRespuesta;
+          const cantVotos = voto.voto;
+          await updateVoto(idPregunta, idRespuesta, cantVotos);
+        }
+        res.status(200).json({ message: 'Votos actualizados correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al actualizar los votos' });
     }
-    else{
-        return res.status(200).json(respuesta);
-    }  
+
 }
 
 // controlador de getVotos 

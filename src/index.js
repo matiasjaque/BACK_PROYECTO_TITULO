@@ -58,6 +58,8 @@ app.use(helmet.hidePoweredBy()); */
 /* app.set('port', 3200); */
 app.use(morgan('dev'));
 
+app.use(express.json())
+
 // con el objetivo de evitar inserciones scripts/HTML en la entrada.
 //app.use(xss())
 
@@ -76,7 +78,5 @@ app.listen(PORT, ()=> {
     console.log('Servidor corriendo en puerto 3200 ' + process.env.PORT + ' ' + PORT);
 });
 
-//app.use(express.urlencoded({extended:false}));
-/* app.use(tasksRoutes);
-*/
+
 export default app; 
