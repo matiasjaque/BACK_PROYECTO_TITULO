@@ -192,3 +192,72 @@ export const deletePreguntaControlador = async function (req, res) {
     }
 }
 
+
+// controlador de delete pregunta by id
+export const deletePreguntaControladorLote = async function (req, res) {
+    const preguntasEliminar = req.body;
+    console.log(preguntasEliminar)
+    if (!Array.isArray(preguntasEliminar)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de preguntas' });
+    }
+
+    
+    try {
+        for (const pregunta of preguntasEliminar) {
+            console.log(pregunta.idVotacion, pregunta.idPregunta)
+            if(
+            isNaN(pregunta.idVotacion) || 
+            isNaN(pregunta.idPregunta) ){
+                return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+            }
+          const idPregunta = pregunta.idPregunta;
+          const idVotacion = pregunta.idVotacion;
+          await deletePregunta(idPregunta, idVotacion);
+        }
+        res.status(200).json({ message: 'Preguntas eliminadas correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al eliminar las preguntas' });
+    }
+
+
+}
+
+// controlador de createPreguntaControlador
+export const createPreguntaControladorLote = async function (req, res) {
+
+    const preguntasAgregar = req.body;
+    console.log(preguntasAgregar)
+    if (!Array.isArray(preguntasAgregar)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de preguntas' });
+    }
+
+    
+    try {
+        for (const pregunta of preguntasAgregar) {
+            console.log(pregunta.idVotacion, pregunta.titulo, pregunta.idPregunta)
+            if(!pregunta.titulo.match(onlyLettersPattern)||
+            isNaN(pregunta.idVotacion) || 
+            isNaN(pregunta.idPregunta) ){
+                return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+            }
+          const titulo = pregunta.titulo;  
+          const idPregunta = pregunta.idPregunta;
+          const idVotacion = pregunta.idVotacion;
+          await createPregunta(idVotacion, titulo, idPregunta);
+        }
+        res.status(200).json({ message: 'Preguntas eliminadas correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al eliminar las preguntas' });
+    }
+    
+}
+
+
+
+
+
+    
+
+   

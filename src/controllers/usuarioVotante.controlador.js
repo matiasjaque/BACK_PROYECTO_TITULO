@@ -1,5 +1,5 @@
 import url from 'url';
-import {getUsuariosVotantes, createUsuarioVotante, updateUsuarioVotante, deleteUsuarioVotante} from '../services/usuarioVotante.services.js';
+import {getUsuariosVotantes, createUsuarioVotante, updateUsuarioVotante, deleteUsuarioVotante, buscarUsuarioVotante} from '../services/usuarioVotante.services.js';
 
 const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
 
@@ -39,6 +39,13 @@ export const createUsuarioVotanteControlador = async function (req, res) {
 
     console.log(nombre, rut, idVotacion);
 
+    // validar si la respuesta ya existe
+    const usuarioVotanteExiste = await buscarUsuarioVotante(idVotacion, rut);
+
+    if(usuarioVotanteExiste){
+        return res.status(409).json({message: 'El usuario ya existe'});
+    }
+
     let result = await createUsuarioVotante(nombre, rut, idVotacion, validacion, 0);
     console.log("data " +result);
     let usuario = result; 
@@ -51,6 +58,39 @@ export const createUsuarioVotanteControlador = async function (req, res) {
         return res.status(200).json(usuario);
     }  
 }
+
+
+// controlador de createUsuarioVotante por lote
+export const createUsuarioVotantePorLoteControlador = async function (req, res) {
+    const usuarioVotantes = req.body;
+    console.log(usuarioVotantes)
+    if (!Array.isArray(usuarioVotantes)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de usuarios votantes' });
+    }
+
+    try {
+        for (const userVotante of usuarioVotantes) {
+            console.log(userVotante.NOMBRE, userVotante.idVotacion, userVotante.validacion, userVotante.RUT)
+            if( !userVotante.NOMBRE.match(onlyLettersPattern) ||
+            isNaN(userVotante.idVotacion) || 
+            isNaN(userVotante.validacion) ||
+            isNaN(userVotante.RUT) ){
+                return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+            }
+          const nombre = userVotante.NOMBRE;
+          const rut = userVotante.RUT;
+          const idVotacion = userVotante.idVotacion;
+          const validacion = userVotante.validacion;
+          await createUsuarioVotante(nombre, rut, idVotacion, validacion, 0);
+        }
+        res.status(200).json({ message: 'Votos actualizados correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al actualizar los votos' });
+    }
+    
+}
+
 
 // controlador de update contraseña del usuario
 export const updateUsuarioVotanteControlador = async function (req, res) {
@@ -102,4 +142,38 @@ export const deleteUsuarioVotanteControlador = async function (req, res) {
     }  
 }
 
+// controlador de delete usuario votante por lote
+export const deleteUsuarioVotanteControladorLote = async function (req, res) {
+
+    const usuarioVotantesEliminar = req.body;
+    console.log(usuarioVotantesEliminar)
+    if (!Array.isArray(usuarioVotantesEliminar)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de usuarios votantes' });
+    }
+
+    try {
+        for (const userVotante of usuarioVotantesEliminar) {
+            console.log(userVotante.idVotacion, userVotante.RUT)
+            if(
+            isNaN(userVotante.idVotacion) || 
+            isNaN(userVotante.RUT) ){
+                return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+            }
+          const rut = userVotante.RUT;
+          const idVotacion = userVotante.idVotacion;
+          await deleteUsuarioVotante(rut, idVotacion);
+        }
+        res.status(200).json({ message: 'Votos actualizados correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al actualizar los votos' });
+    }
+
+   
+
+}
+
+
+
+   
 

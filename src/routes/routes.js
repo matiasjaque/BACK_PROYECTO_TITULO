@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import {getUsuariosControlador, getUsuariosGmailControlador, updateContrasenaUsuarioControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
-import {getUsuariosVotanteControlador, createUsuarioVotanteControlador, updateUsuarioVotanteControlador, deleteUsuarioVotanteControlador} from '../controllers/usuarioVotante.controlador.js';
+import {getUsuariosVotanteControlador, createUsuarioVotanteControlador, createUsuarioVotantePorLoteControlador, updateUsuarioVotanteControlador, deleteUsuarioVotanteControlador, deleteUsuarioVotanteControladorLote} from '../controllers/usuarioVotante.controlador.js';
 import {getVotacionesControlador, getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
-import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador, updatePreguntaControlador, deletePreguntaControlador} from '../controllers/preguntas.controller.js';
-import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador,updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador} from '../controllers/respuestas.controller.js';
+import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador,createPreguntaControladorLote, updatePreguntaControlador, deletePreguntaControlador, deletePreguntaControladorLote} from '../controllers/preguntas.controller.js';
+import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador, createRespuestaControladorLote, updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador, deleteRespuestaControladorLote} from '../controllers/respuestas.controller.js';
 import { pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
 
 const router = Router();
@@ -40,11 +40,18 @@ router.get('/usuariosVotante', getUsuariosVotanteControlador);
 // crear un nuevo usuario
 router.post('/usuarioVotanteCreate', createUsuarioVotanteControlador);
 
+// crear un nuevo usuario votante por lote
+router.post('/usuarioVotanteCreateLote', createUsuarioVotantePorLoteControlador);
+
+
 //actualizar estado voto del usuario votante
 router.put('/usuarioVotanteUpdate', updateUsuarioVotanteControlador);
 
 //delete usuario votante
 router.delete('/usuarioVotanteDelete', deleteUsuarioVotanteControlador);
+
+//delete usuario votante x lote
+router.delete('/usuarioVotanteDeleteLote', deleteUsuarioVotanteControladorLote);
 
 // votaciones
 
@@ -85,11 +92,17 @@ router.get('/preguntasConRespuestas', getPreguntasConRespuestas);
 // crear una nueva pregunta a una votacion
 router.post('/preguntaCreate', createPreguntaControlador);
 
+// crear una nueva pregunta x lote
+router.post('/preguntaCreateLote', createPreguntaControladorLote);
+
 //actualizar una pregunta de una votacion
 router.put('/preguntaUpdate', updatePreguntaControlador); 
 
 //delete pregunta de una votacion
 router.delete('/preguntaDelete', deletePreguntaControlador); 
+
+//delete pregunta de una votacion x lote
+router.delete('/preguntaDeleteLote', deletePreguntaControladorLote); 
 
 
 // respuestas de las preguntas de las votaciones
@@ -106,6 +119,9 @@ router.get('/votosGet', getVotosControlador);
 // crear una nueva respuesta a una pregunta de una votacion
 router.post('/respuestaCreate', createRespuestaControlador);
 
+// crear una nueva respuesta x lote
+router.post('/respuestaCreateLote', createRespuestaControladorLote);
+
 //actualizar una respuesta de una votacion
 router.put('/respuestaUpdate', updateRespuestaControlador); 
 
@@ -114,6 +130,9 @@ router.put('/votoUpdate', updateVotoControlador);
 
 //delete respuesta de una votacion
 router.delete('/respuestaDelete', deleteRespuestaControlador); 
+
+//delete respuesta de una votacion
+router.delete('/respuestaDeleteLote', deleteRespuestaControladorLote); 
 
 
 

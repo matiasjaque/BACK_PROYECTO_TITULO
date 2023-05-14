@@ -1,5 +1,4 @@
 import url from 'url';
-import bodyParser from 'body-parser';
 import {getRespuestas, getRespuestasGlobal, createRespuesta, updateRespuesta, deleteRespuesta, updateVoto, getVotos, buscarRespuesta} from '../services/respuestas.services.js';
 
 const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
@@ -200,3 +199,71 @@ export const getVotosControlador = async function (req, res) {
         return res.status(200).json(voto);
     }  
 }
+
+// controlador de delete respuesta by lote
+export const deleteRespuestaControladorLote = async function (req, res) {
+
+    const respuestasEliminar = req.body;
+    console.log(respuestasEliminar)
+    if (!Array.isArray(respuestasEliminar)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de preguntas' });
+    }
+
+    try {
+        for (const respuesta of respuestasEliminar) {
+            console.log(respuesta.idPregunta, respuesta.idRespuesta)
+            if(
+            isNaN(respuesta.idPregunta) || 
+            isNaN(respuesta.idRespuesta) ){
+                return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+            }
+          const idRespuesta = respuesta.idRespuesta;
+          const idPregunta = respuesta.idPregunta;
+          await deleteRespuesta(idPregunta, idRespuesta);
+        }
+        res.status(200).json({ message: 'Preguntas eliminadas correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al eliminar las preguntas' });
+    }
+
+
+}
+
+
+// controlador de createRespuesta x lote
+export const createRespuestaControladorLote = async function (req, res) {
+
+
+    const respuestasAgregar = req.body;
+    console.log(respuestasAgregar)
+    if (!Array.isArray(respuestasAgregar)) {
+        return res.status(400).json({ message: 'El cuerpo de la solicitud debe ser un arreglo de preguntas' });
+    }
+
+    try {
+        for (const respuesta of respuestasAgregar) {
+            console.log(respuesta.idPregunta, respuesta.respuestas)
+            if(
+            isNaN(respuesta.idPregunta) || 
+            !respuesta.respuestas.match(onlyLettersPattern) ){
+                return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
+            }
+          const respuestas = respuesta.respuestas;
+          const idPregunta = respuesta.idPregunta;
+          await createRespuesta(idPregunta, respuestas );
+        }
+        res.status(200).json({ message: 'Preguntas eliminadas correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error al eliminar las preguntas' });
+    }
+
+}
+
+
+
+
+
+    
+    

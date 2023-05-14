@@ -10,6 +10,15 @@ export const getUsuariosVotantes = async() =>{
 
 }
 
+export const buscarUsuarioVotante = async(idVotacion, rut) =>{
+    const connection = await conexion();
+    const [rows] = await connection.execute("SELECT * FROM usuariovotante WHERE rut = ? AND id_votacion = ?",
+    [rut, idVotacion]);
+    console.log("services ");
+    console.log(rows);
+    return rows.length > 0 ? rows[0] : null;
+}
+
 export const createUsuarioVotante = async(nombre, rut, idVotacion, validacion, voto) =>{
     const connection = await conexion();
     const [rows] = await connection.execute("INSERT INTO usuariovotante (nombre, rut, id_votacion, validacion, voto) values (?,?,?,?,?)", 
