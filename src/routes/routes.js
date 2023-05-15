@@ -139,7 +139,7 @@ router.delete('/respuestaDeleteLote', deleteRespuestaControladorLote);
 
 
 // zona de pruebas
-router.get('/hola', pruebaHola);
+router.get('/hola', pruebaHola); 
 
 router.get('/pruebaLogin', doLoginPrueba);
 
