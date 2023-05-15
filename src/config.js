@@ -3,20 +3,20 @@ import mysql from 'mysql2/promise';
 
 export const conexion = async() =>{
     
-    return await mysql.createConnection({   
+    /* return await mysql.createConnection({   
 
         host: 'localhost',
         database: 'proyectoTitulo',
         user: 'root',
         password: 'matiasjaque',
-    })
+    }) */
 
-    /* return await mysql.createConnection({
+    return await mysql.createConnection({
         host: 'bd-remota.mysql.database.azure.com',
         database: 'bd-remota',
         user: 'adminmysql',
         password: 'matiasjaque2000*',
-    })   */
+    })  
 
     /* return await mysql.createConnection({
         host: 'us-cdbr-east-06.cleardb.net',
