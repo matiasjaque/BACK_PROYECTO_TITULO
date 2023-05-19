@@ -1,7 +1,16 @@
 import mysql from 'mysql2/promise';
 
 
-export const conexion = async() =>{
+export const conexion = mysql.createPool({
+    connectionLimit: 50,
+    host: 'localhost',
+    database: 'proyectoTitulo',
+    user: 'root',
+    password: 'matiasjaque',
+  });
+
+
+//export const conexion = async() =>{
     
     /* return await mysql.createConnection({   
 
@@ -11,12 +20,14 @@ export const conexion = async() =>{
         password: 'matiasjaque',
     }) */
 
-    return await mysql.createConnection({
+    
+
+    /* return await mysql.createConnection({
         host: 'bd-remota.mysql.database.azure.com',
         database: 'bd-remota',
         user: 'adminmysql',
         password: 'matiasjaque2000*',
-    })  
+    }) */  
 
     /* return await mysql.createConnection({
         host: 'us-cdbr-east-06.cleardb.net',
@@ -25,7 +36,7 @@ export const conexion = async() =>{
         password: 'ce65f55c',
         migrate: 'safe',
     })   */
-}
+//}
 
 
 

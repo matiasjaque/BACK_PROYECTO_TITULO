@@ -7,9 +7,52 @@ import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet';
 
+import * as Sentry from "@sentry/node";
+
+
+
+
 
 
 const app = express();
+Sentry.init({
+  dsn: "https://ce9a9e5f107e47cdb2494e358172e645@o4505194838294528.ingest.sentry.io/4505194968383488",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+const transaction = Sentry.startTransaction({
+  op: "test",
+  name: "My First Test Transaction",
+});
+
+setTimeout(() => {
+  try {
+    foo();
+  } catch (e) {
+    Sentry.captureException(e);
+  } finally {
+    transaction.finish();
+  }
+}, 99);
+
+
+// El manejador de errores debe ser definido después de todas las rutas
+app.use((err, req, res, next) => {
+  // Capturar y enviar el error a Sentry
+  Sentry.captureException(err);
+  
+  // También puedes registrar información adicional sobre el error
+  Sentry.setExtra("requestBody", req.body);
+  Sentry.setExtra("requestHeaders", req.headers);
+  
+  // Enviar una respuesta de error al cliente
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
 
 /* const corsOptions = {
   origin: ['http://localhost:3000', 'http://votaciononline.s3-website-us-east-1.amazonaws.com'],

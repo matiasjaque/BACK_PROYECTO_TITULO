@@ -1,5 +1,12 @@
 import url from 'url';
+import * as Sentry from "@sentry/node";
 import {doLogin, getUsuarios, getUsuariosGmail, createUsuario, updateUsuario, updateUsuarioContrasena, doLoginPrueba} from '../services/usuarios.services.js';
+
+// Inicializar Sentry
+Sentry.init({
+    dsn: "https://ce9a9e5f107e47cdb2494e358172e645@o4505194838294528.ingest.sentry.io/4505194968383488",
+    tracesSampleRate: 1.0,
+  });
 
 const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
 
@@ -20,29 +27,38 @@ export const login = async function (req, res) {
     //validar que existe el usuario
     console.log(email, password);
 
-    let result = await doLogin(email, password);
+    try{
+        let result = await doLogin(email, password);
 
-    console.log("resultado del login: " + result);
-    console.log("largo del login: " + result.length);
-    console.log("metodo rows del login: " + result.rows);
+        console.log("resultado del login: " + result);
+        console.log("largo del login: " + result.length);
+        console.log("metodo rows del login: " + result.rows);
+    
+        if (result.length === 0) {
+            console.log("Usuario no existe");
+            return res.status(401).json({message: 'El email o la contraseña ingresado son incorrectos'});
+        }
+        console.log("resultdo en [0].nombre: " + result[0].NOMBRE)
+        let user = result[0];
+        console.log("USUARIO: " + user.NOMBRE);
+        console.log("USUARIO[2]: " + user.PASSWORD);
+        if (user.PASSWORD === password) {
+            user.PASSWORD = null;
+            console.log(user);
+            return res.status(200).json(user)
+        }
+        else{
+            console.log("Contraseña invalida");
+            return res.status(401).json({message: 'Contraseña invalida'});
+        }
+    }catch (error) {
+        console.log(error);
+        // Capturar y enviar el error a Sentry
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
+    }
 
-    if (result.length === 0) {
-        console.log("Usuario no existe");
-        return res.status(401).json({message: 'El email o la contraseña ingresado son incorrectos'});
-    }
-    console.log("resultdo en [0].nombre: " + result[0].NOMBRE)
-    let user = result[0];
-    console.log("USUARIO: " + user.NOMBRE);
-    console.log("USUARIO[2]: " + user.PASSWORD);
-    if (user.PASSWORD === password) {
-        user.PASSWORD = null;
-        console.log(user);
-        return res.status(200).json(user)
-    }
-    else{
-        console.log("Contraseña invalida");
-        return res.status(401).json({message: 'Contraseña invalida'});
-    }
+    
 }
 
 
@@ -51,33 +67,49 @@ export const login = async function (req, res) {
 // controlador de getUsuarios 
 
 export const getUsuariosControlador = async function (req, res) {
-    let result = await getUsuarios();
-    console.log("controlador " + result);
-    let usuarios = result; 
-    console.log("usuarios: " + usuarios);
-
-    if (usuarios.length === 0) {
-        return res.status(401).json({message: 'No hay usuarios'});
+    try{
+        let result = await getUsuarios();
+        console.log("controlador " + result);
+        let usuarios = result; 
+        console.log("usuarios: " + usuarios);
+    
+        if (usuarios.length === 0) {
+            return res.status(401).json({message: 'No hay usuarios'});
+        }
+        else{
+            return res.status(200).json(usuarios);
+        }  
+    }catch (error) {
+        console.log(error);
+        // Capturar y enviar el error a Sentry
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(usuarios);
-    }  
+    
 }
 
 // controlador de getUsuariosGmailControlador 
 
 export const getUsuariosGmailControlador = async function (req, res) {
-    let result = await getUsuariosGmail();
-    console.log("controlador " + result);
-    let usuarios = result; 
-    console.log("usuarios: " + usuarios);
-
-    if (usuarios.length === 0) {
-        return res.status(401).json({message: 'No hay usuarios'});
+    try{
+        let result = await getUsuariosGmail();
+        console.log("controlador " + result);
+        let usuarios = result; 
+        console.log("usuarios: " + usuarios);
+    
+        if (usuarios.length === 0) {
+            return res.status(401).json({message: 'No hay usuarios'});
+        }
+        else{
+            return res.status(200).json(usuarios);
+        }  
+    }catch (error) {
+        console.log(error);
+        // Capturar y enviar el error a Sentry
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(usuarios);
-    }  
+    
 }
 
 
@@ -101,17 +133,26 @@ export const createUsuarioControlador = async function (req, res) {
 
     console.log(nombre, apellidoPaterno, apellidoMaterno,email, password);
 
-    let result = await createUsuario(nombre, apellidoPaterno, apellidoMaterno, email, password);
-    console.log("data " +result);
-    let usuario = result; 
-    console.log("usuario: " + usuario);
-
-    if (usuario.length === 0) {
-        return res.status(401).json({message: 'No hay usuarios'});
+    try{
+        let result = await createUsuario(nombre, apellidoPaterno, apellidoMaterno, email, password);
+        console.log("data " +result);
+        let usuario = result; 
+        console.log("usuario: " + usuario);
+    
+        if (usuario.length === 0) {
+            return res.status(401).json({message: 'No hay usuarios'});
+        }
+        else{
+            return res.status(200).json(usuario);
+        } 
+    }catch (error) {
+        console.log(error);
+        // Capturar y enviar el error a Sentry
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(usuario);
-    }  
+
+     
 }
 
 // controlador de update contraseña del usuario
@@ -124,17 +165,25 @@ export const updateUsuarioControlador = async function (req, res) {
 
     console.log(email, password);
 
-    let result = await updateUsuario(email, password);
-    console.log("data " +result);
-    let usuario = result; 
-    console.log("usuario: " + usuario);
-
-    if (usuario.length === 0) {
-        return res.status(401).json({message: 'No hay usuarios'});
+    try{
+        let result = await updateUsuario(email, password);
+        console.log("data " +result);
+        let usuario = result; 
+        console.log("usuario: " + usuario);
+    
+        if (usuario.length === 0) {
+            return res.status(401).json({message: 'No hay usuarios'});
+        }
+        else{
+            return res.status(200).json(usuario);
+        }  
+    }catch (error) {
+        console.log(error);
+        // Capturar y enviar el error a Sentry
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(usuario);
-    }  
+    
 }
 
 function generarContraseña(longitud) {
@@ -157,17 +206,26 @@ export const updateContrasenaUsuarioControlador = async function (req, res) {
 
     console.log(email, password);
 
-    let result = await updateUsuarioContrasena(email, password);
-    console.log("data " +result);
-    let usuario = result; 
-    console.log("usuario: " + usuario);
-
-    if (usuario.length === 0) {
-        return res.status(401).json({message: 'No hay usuarios'});
+    try{
+        let result = await updateUsuarioContrasena(email, password);
+        console.log("data " +result);
+        let usuario = result; 
+        console.log("usuario: " + usuario);
+    
+        if (usuario.length === 0) {
+            return res.status(401).json({message: 'No hay usuarios'});
+        }
+        else{
+            return res.status(200).json(usuario);
+        } 
+    }catch (error) {
+        console.log(error);
+        // Capturar y enviar el error a Sentry
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(usuario);
-    }  
+
+     
 }
 
 

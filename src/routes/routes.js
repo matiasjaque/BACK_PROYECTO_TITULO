@@ -2,8 +2,8 @@ import { Router } from 'express';
 import {getUsuariosControlador, getUsuariosGmailControlador, updateContrasenaUsuarioControlador, createUsuarioControlador,updateUsuarioControlador, login} from '../controllers/usuarios.controllers.js';
 import {getUsuariosVotanteControlador, createUsuarioVotanteControlador, createUsuarioVotantePorLoteControlador, updateUsuarioVotanteControlador, deleteUsuarioVotanteControlador, deleteUsuarioVotanteControladorLote} from '../controllers/usuarioVotante.controlador.js';
 import {getVotacionesControlador, getVotacionesByIdControlador, getVotacionByIdControlador, updateVotacionEstadoControlador, createVotacionControlador, updateVotacionControlador, deleteVotacionControlador} from '../controllers/votaciones.controller.js';
-import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador,createPreguntaControladorLote, updatePreguntaControlador, deletePreguntaControlador, deletePreguntaControladorLote} from '../controllers/preguntas.controller.js';
-import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador, createRespuestaControladorLote, updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, getVotosControlador, deleteRespuestaControladorLote} from '../controllers/respuestas.controller.js';
+import {getPreguntasControlador, getPreguntasGlobalControlador, getPreguntasConRespuestas, createPreguntaControlador,createPreguntaControladorLote, updatePreguntaControlador, updatePreguntaControladorLote, deletePreguntaControlador, deletePreguntaControladorLote} from '../controllers/preguntas.controller.js';
+import {getRespuestasControlador, getRespuestasGlobalControlador, createRespuestaControlador, createRespuestaControladorLote, updateRespuestaControlador, deleteRespuestaControlador, updateVotoControlador, updateRespuestaControladorLote, getVotosControlador, deleteRespuestaControladorLote} from '../controllers/respuestas.controller.js';
 import { pruebaHola, doLoginPrueba} from '../services/usuarios.services.js';
 
 const router = Router();
@@ -98,6 +98,9 @@ router.post('/preguntaCreateLote', createPreguntaControladorLote);
 //actualizar una pregunta de una votacion
 router.put('/preguntaUpdate', updatePreguntaControlador); 
 
+//actualizar una pregunta de una votacion x lote
+router.put('/preguntaUpdateLote', updatePreguntaControladorLote); 
+
 //delete pregunta de una votacion
 router.delete('/preguntaDelete', deletePreguntaControlador); 
 
@@ -123,7 +126,10 @@ router.post('/respuestaCreate', createRespuestaControlador);
 router.post('/respuestaCreateLote', createRespuestaControladorLote);
 
 //actualizar una respuesta de una votacion
-router.put('/respuestaUpdate', updateRespuestaControlador); 
+router.put('/respuestaUpdate', updateRespuestaControlador);
+
+//actualizar una respuesta de una votacion
+router.put('/respuestaUpdateLote', updateRespuestaControladorLote);
 
 //permitir un voto a una respuesta
 router.put('/votoUpdate', updateVotoControlador); 

@@ -1,5 +1,12 @@
 import url from 'url';
+import * as Sentry from "@sentry/node";
 import {getVotacionesGlobal, getVotacionesById, getVotacionById, createVotacion, updateVotacion, updateVotacionEstado, deleteVotacion} from '../services/votaciones.services.js';
+
+// Inicializar Sentry
+Sentry.init({
+    dsn: "https://ce9a9e5f107e47cdb2494e358172e645@o4505194838294528.ingest.sentry.io/4505194968383488",
+    tracesSampleRate: 1.0,
+  });
 
 const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
 
@@ -8,18 +15,24 @@ const onlyLettersPattern = /^[a-zA-Z0-9?¿!¡ ()áéíóúñÁÉÍÓÚÑ]+$/;
 
 export const getVotacionesControlador = async function (req, res) {
     
-
-    let result = await getVotacionesGlobal();
-    console.log("controlador " + result);
-    let votaciones = result; 
-    console.log("votaciones: " + votaciones);
-
-    if (votaciones.length === 0) {
-        return res.status(401).json({message: '¡NO HAY VOTACIONES CREADAS AÚN!'});
+    try{
+        let result = await getVotacionesGlobal();
+        console.log("controlador " + result);
+        let votaciones = result; 
+        console.log("votaciones: " + votaciones);
+    
+        if (votaciones.length === 0) {
+            return res.status(401).json({message: '¡NO HAY VOTACIONES CREADAS AÚN!'});
+        }
+        else{
+            return res.status(200).json(votaciones);
+        } 
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votaciones);
-    }  
+     
 }
 
 // controlador de getVotaciones 
@@ -35,17 +48,25 @@ export const getVotacionesByIdControlador = async function (req, res) {
 
     console.log(idUsuario);
 
-    let result = await getVotacionesById(idUsuario);
-    console.log("controlador " + result);
-    let votaciones = result; 
-    console.log("votaciones: " + votaciones);
-
-    if (votaciones.length === 0) {
-        return res.status(401).json({message: '¡NO HAY VOTACIONES CREADAS AÚN!'});
+    try{
+        let result = await getVotacionesById(idUsuario);
+        console.log("controlador " + result);
+        let votaciones = result; 
+        console.log("votaciones: " + votaciones);
+    
+        if (votaciones.length === 0) {
+            return res.status(401).json({message: '¡NO HAY VOTACIONES CREADAS AÚN!'});
+        }
+        else{
+            return res.status(200).json(votaciones);
+        }  
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votaciones);
-    }  
+
+    
 }
 
 // controlador de getVotacion 
@@ -61,17 +82,25 @@ export const getVotacionByIdControlador = async function (req, res) {
 
     console.log(idVotacion);
 
-    let result = await getVotacionById(idVotacion);
-    console.log("controlador " + result);
-    let votaciones = result; 
-    console.log("votaciones: " + votaciones);
-
-    if (votaciones.length === 0) {
-        return res.status(401).json({message: '¡NO HAY VOTACION CREADA AÚN!'});
+    try{
+        let result = await getVotacionById(idVotacion);
+        console.log("controlador " + result);
+        let votaciones = result; 
+        console.log("votaciones: " + votaciones);
+    
+        if (votaciones.length === 0) {
+            return res.status(401).json({message: '¡NO HAY VOTACION CREADA AÚN!'});
+        }
+        else{
+            return res.status(200).json(votaciones);
+        }  
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votaciones);
-    }  
+
+    
 }
 
 
@@ -101,23 +130,29 @@ export const createVotacionControlador = async function (req, res) {
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
     }
 
+    try{
+        let result = await createVotacion(idUsuario, titulo, idVotacion, estado, tipo, porcentaje, segura );
+        console.log("data " +result);
+        let votacion = result; 
+        console.log("votacion: ");  
+        console.log(votacion);
     
-
-    let result = await createVotacion(idUsuario, titulo, idVotacion, estado, tipo, porcentaje, segura );
-    console.log("data " +result);
-    let votacion = result; 
-    console.log("votacion: ");  
-    console.log(votacion);
-
-    console.log("votacion: insertId ");
-    console.log(votacion.insertId);
-
-    if (votacion.length === 0) {
-        return res.status(401).json({message: 'No se pudo crear la votacion'});
+        console.log("votacion: insertId ");
+        console.log(votacion.insertId);
+    
+        if (votacion.length === 0) {
+            return res.status(401).json({message: 'No se pudo crear la votacion'});
+        }
+        else{
+            return res.status(200).json(votacion);
+        } 
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votacion);
-    }  
+
+     
 }
 
 // controlador de update votacion by id
@@ -128,25 +163,34 @@ export const updateVotacionControlador = async function (req, res) {
     var idUsuario = queryObject.idUsuario;
     var idVotacion = queryObject.idVotacion;
     var titulo = queryObject.titulo;
+    var porcentaje = queryObject.porcentaje;
 
-    if(isNaN(idUsuario) || isNaN(idVotacion) || !titulo.match(onlyLettersPattern)){
+    if(isNaN(idUsuario) || isNaN(idVotacion) || !titulo.match(onlyLettersPattern) || isNaN(porcentaje)){
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
     }
 
-    console.log(idUsuario, idVotacion, titulo);
+    console.log(idUsuario, idVotacion, titulo, porcentaje);
 
-    let result = await updateVotacion(idUsuario, titulo, idVotacion);
-    console.log("data " +result);
-    let votacion = result; 
-    console.log("votacion: ");
-    console.log(votacion);
-
-    if (votacion.length === 0) {
-        return res.status(401).json({message: 'No hay votacion'});
+    try{
+        let result = await updateVotacion(idUsuario, titulo, idVotacion, porcentaje);
+        console.log("data " +result);
+        let votacion = result; 
+        console.log("votacion: ");
+        console.log(votacion);
+    
+        if (votacion.length === 0) {
+            return res.status(401).json({message: 'No hay votacion'});
+        }
+        else{
+            return res.status(200).json(votacion);
+        }  
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votacion);
-    }  
+
+    
 }
 
 // controlador de update votacion estado by id
@@ -163,18 +207,26 @@ export const updateVotacionEstadoControlador = async function (req, res) {
         return res.status(401).json({message: '¡LOS PARAMETROS INGRESADOS SON INVALIDOS!'}); 
     }
 
-    let result = await updateVotacionEstado(idUsuario, estado, idVotacion);
-    console.log("data " +result);
-    let votacion = result; 
-    console.log("votacion: ");
-    console.log(votacion);
-
-    if (votacion.length === 0) {
-        return res.status(401).json({message: 'No hay votacion'});
+    try{
+        let result = await updateVotacionEstado(idUsuario, estado, idVotacion);
+        console.log("data " +result);
+        let votacion = result; 
+        console.log("votacion: ");
+        console.log(votacion);
+    
+        if (votacion.length === 0) {
+            return res.status(401).json({message: 'No hay votacion'});
+        }
+        else{
+            return res.status(200).json(votacion);
+        }  
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votacion);
-    }  
+
+    
 }
 
 
@@ -193,17 +245,25 @@ export const deleteVotacionControlador = async function (req, res) {
 
     console.log(idUsuario, idVotacion);
 
-    let result = await deleteVotacion(idUsuario, idVotacion);
-    console.log("data " +result);
-    let votacion = result; 
-    console.log("votacion: " + votacion);
-
-    if (votacion.length === 0) {
-        return res.status(401).json({message: 'No hay votacion'});
+    try{
+        let result = await deleteVotacion(idUsuario, idVotacion);
+        console.log("data " +result);
+        let votacion = result; 
+        console.log("votacion: " + votacion);
+    
+        if (votacion.length === 0) {
+            return res.status(401).json({message: 'No hay votacion'});
+        }
+        else{
+            return res.status(200).json(votacion);
+        }  
+    }catch (error) {
+        console.log(error);
+        Sentry.captureException(error);
+        res.status(500).json({ message: error.message });
     }
-    else{
-        return res.status(200).json(votacion);
-    }  
+
+    
 }
 
 
